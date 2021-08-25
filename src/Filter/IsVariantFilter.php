@@ -21,7 +21,7 @@ class IsVariantFilter implements FilterInterface
     protected function constrain(Builder $query, $type, $negate)
     {
         if ($type === 'child') {
-            $query->whereNull('flamarkt_products.variant_parent_id', !$negate);
+            $query->whereNull('flamarkt_products.variant_master_id', !$negate);
         } else {
             $query->where('flamarkt_products.is_variant_master', '=', $negate ? 0 : 1);
         }

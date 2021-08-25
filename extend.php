@@ -2,6 +2,7 @@
 
 namespace Flamarkt\Variants;
 
+use Flamarkt\Core\Api\Controller;
 use Flamarkt\Core\Api\Serializer\ProductSerializer;
 use Flamarkt\Core\Product\Event\Saving;
 use Flamarkt\Core\Product\Product;
@@ -26,9 +27,16 @@ return [
         ->hasMany('variants', ProductSerializer::class),
 
     (new Extend\Filter(ProductFilterer::class))
+        ->addFilter(Filter\AllVariantsFilter::class)
         ->addFilter(Filter\IsVariantFilter::class)
-        ->addFilter(Filter\VariantOfFilter::class),
+        ->addFilter(Filter\VariantOfFilter::class)
+        ->addFilterMutator(Filter\DefaultMutator::class),
 
     (new Extend\Event())
         ->listen(Saving::class, Listener\SavingProduct::class),
+
+    (new Extend\ApiController(Controller\ProductIndexController::class))
+        ->addInclude('variants'),
+    (new Extend\ApiController(Controller\ProductShowController::class))
+        ->addInclude('variants'),
 ];
