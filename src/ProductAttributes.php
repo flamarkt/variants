@@ -9,9 +9,23 @@ class ProductAttributes
 {
     public function __invoke(ProductSerializer $serializer, Product $product): array
     {
-        return [
+        $isChild = !is_null($product->variant_master_id);
+
+        $attributes = [
             'isVariantMaster' => (bool)$product->is_variant_master,
-            'isVariantChild' => !is_null($product->variant_master_id),
+            'isVariantChild' => $isChild,
         ];
+
+        // If some attributes are not defined, copy them over from the parent
+        if ($isChild) {
+            if (!$product->description) {
+                $attributes += [
+                    'description' => $product->variantMaster->description,
+                    'descriptionHtml' => $product->variantMaster->formatDescription($serializer->getRequest()),
+                ];
+            }
+        }
+
+        return $attributes;
     }
 }

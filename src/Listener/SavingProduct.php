@@ -31,7 +31,7 @@ class SavingProduct
 
             $id = Arr::get($event->data, 'data.relationships.variantMaster.data.id');
 
-            $event->product->variantParent()->associate($id);
+            $event->product->variantMaster()->associate($id);
         }
     }
 }
