@@ -1,21 +1,18 @@
-// Mithril
-import Mithril from 'mithril';
+import ProductShowLayout from 'flamarkt/core/forum/layouts/ProductShowLayout';
 
-declare global {
-    const m: Mithril.Static;
+declare module 'flamarkt/core/forum/layouts/ProductShowLayout' {
+    export default interface ProductShowLayout {
+        selectedVariantIndex: number
+    }
 }
 
-import ForumApplication from 'flarum/forum/ForumApplication';
-import AdminApplication from 'flarum/admin/AdminApplication';
+import ProductShowPage from 'flamarkt/core/backoffice/pages/ProductShowPage';
+import ProductListState from 'flamarkt/core/common/states/ProductListState';
 
-declare global {
-    const app: ForumApplication & AdminApplication;
-}
-
-// Fix wrong signatures from Flarum
-declare module 'flarum/common/Translator' {
-    export default interface Translator {
-        // Make second parameter optional
-        trans(id: any, parameters?: any): any;
+declare module 'flamarkt/core/backoffice/pages/ProductShowPage' {
+    export default interface ProductShowPage {
+        variantChildrenAttached: boolean
+        isVariantMaster: boolean
+        variantProductListState: ProductListState
     }
 }

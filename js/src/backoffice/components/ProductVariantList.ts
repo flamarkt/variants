@@ -1,8 +1,8 @@
 import LinkButton from 'flarum/common/components/LinkButton';
-import AbstractList from 'flamarkt/core/backoffice/components/AbstractList';
+import AbstractList from 'flamarkt/backoffice/backoffice/components/AbstractList';
 import Product from 'flamarkt/core/common/models/Product';
 
-export default class ProductVariantList extends AbstractList {
+export default class ProductVariantList extends AbstractList<Product> {
     head() {
         const columns = super.head();
 

@@ -2,12 +2,20 @@
 
 namespace Flamarkt\Variants\Filter;
 
+use Flamarkt\Core\Product\ProductRepository;
 use Flarum\Filter\FilterInterface;
 use Flarum\Filter\FilterState;
 use Illuminate\Database\Query\Builder;
 
 class VariantOfFilter implements FilterInterface
 {
+    protected $products;
+
+    public function __construct(ProductRepository $products)
+    {
+        $this->products = $products;
+    }
+
     public function getFilterKey(): string
     {
         return 'variantOf';
@@ -20,6 +28,8 @@ class VariantOfFilter implements FilterInterface
 
     protected function constrain(Builder $query, $productId, $negate)
     {
-        $query->where('flamarkt_products.variant_master_id', $negate ? '!=' : '=', $productId);
+        $product = $this->products->findUidOrFail($productId);
+
+        $query->where('flamarkt_products.variant_master_id', $negate ? '!=' : '=', $product->id);
     }
 }

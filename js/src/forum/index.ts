@@ -1,6 +1,4 @@
 import {extend, override} from 'flarum/common/extend';
-import LinkButton from 'flarum/common/components/LinkButton';
-import ItemList from 'flarum/common/utils/ItemList';
 import {forum} from './compat';
 import Select from 'flarum/common/components/Select';
 import Product from 'flamarkt/core/common/models/Product';
@@ -16,11 +14,11 @@ export {
 app.initializers.add('flamarkt-variants', () => {
     Product.prototype.variants = Model.hasMany('variants');
 
-    extend(ProductShowLayout.prototype, 'oninit', function (this: ProductShowLayout) {
+    extend(ProductShowLayout.prototype, 'oninit', function () {
         this.selectedVariantIndex = 0;
     });
 
-    override(ProductShowLayout.prototype, 'product', function (this: ProductShowLayout, original: any) {
+    override(ProductShowLayout.prototype, 'product', function (original: any) {
         const {product} = this.attrs;
 
         if (!product || !product.attribute('isVariantMaster')) {
@@ -38,9 +36,9 @@ app.initializers.add('flamarkt-variants', () => {
         return variants[this.selectedVariantIndex];
     });
 
-    extend(ProductShowLayout.prototype, 'priceSection', function (this: ProductShowLayout, items: ItemList) {
+    extend(ProductShowLayout.prototype, 'priceSection', function (items) {
         // We need to access the base attr and not use the function parameter because the parameter has already been switched to a variant
-        const masterProduct = this.attrs.product;
+        const masterProduct = this.attrs.product!;
 
         if (!masterProduct.attribute('isVariantMaster')) {
             return;
@@ -67,7 +65,7 @@ app.initializers.add('flamarkt-variants', () => {
         }), 60);
     });
 
-    extend(ProductListItem.prototype, 'items', function (this: ProductListItem, items: ItemList) {
+    extend(ProductListItem.prototype, 'items', function (items) {
         const {product} = this.attrs;
 
         if (!product.attribute('isVariantMaster')) {
