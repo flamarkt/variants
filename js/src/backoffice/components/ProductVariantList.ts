@@ -18,13 +18,13 @@ export default class ProductVariantList extends AbstractList<Product> {
         columns.add('title', m('td', m('input.FormControl', {
             type: 'text',
             value: product.title(),
-            //TODO: save value
+            readonly: true,
         })), 20);
 
         columns.add('price', m('td', m('input.FormControl', {
             type: 'number',
             value: product.price(),
-            //TODO: save value
+            readonly: true,
         })), 10);
 
         return columns;

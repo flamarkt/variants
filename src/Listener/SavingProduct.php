@@ -18,7 +18,7 @@ class SavingProduct
 
     public function handle(Saving $event)
     {
-        $attributes = Arr::get($event->data, 'data.attributes') ?? [];
+        $attributes = (array)Arr::get($event->data, 'data.attributes');
 
         if (Arr::exists($attributes, 'isVariantMaster')) {
             $event->actor->assertCan('backoffice');
@@ -32,7 +32,7 @@ class SavingProduct
             }
         }
 
-        $relationships = Arr::get($event->data, 'data.relationships') ?? [];
+        $relationships = (array)Arr::get($event->data, 'data.relationships');
 
         if (Arr::exists($relationships, 'variantMaster')) {
             $event->actor->assertCan('backoffice');

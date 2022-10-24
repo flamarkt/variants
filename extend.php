@@ -26,6 +26,7 @@ return [
 
     (new Extend\ApiSerializer(ProductSerializer::class))
         ->attributes(ProductAttributes::class)
+        ->hasOne('variantMaster', ProductSerializer::class)
         ->hasMany('variants', ProductSerializer::class),
 
     (new Extend\ApiSerializer(BasicProductSerializer::class))
@@ -41,9 +42,11 @@ return [
         ->listen(Saving::class, Listener\SavingProduct::class),
 
     (new Extend\ApiController(Controller\ProductIndexController::class))
+        ->addInclude('variantMaster')
         ->addInclude('variants')
         ->addInclude('variants.thumbnail', CheckLibraryEnabled::class),
     (new Extend\ApiController(Controller\ProductShowController::class))
+        ->addInclude('variantMaster')
         ->addInclude('variants')
         ->addInclude('variants.thumbnail', CheckLibraryEnabled::class),
 

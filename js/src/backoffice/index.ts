@@ -3,7 +3,9 @@ import ProductShowPage from 'flamarkt/core/backoffice/pages/ProductShowPage';
 import Product from 'flamarkt/core/common/models/Product';
 import ProductListState from 'flamarkt/core/common/states/ProductListState';
 import {extend} from 'flarum/common/extend';
+import Model from 'flarum/common/Model';
 import Button from 'flarum/common/components/Button';
+import LinkButton from 'flarum/common/components/LinkButton';
 import Switch from 'flarum/common/components/Switch';
 import ProductVariantList from './components/ProductVariantList';
 import {backoffice} from './compat';
@@ -13,6 +15,8 @@ export {
 };
 
 app.initializers.add('flamarkt-variants', () => {
+    Product.prototype.variantMaster = Model.hasOne('variantMaster');
+
     extend(ProductList.prototype, 'head', function (columns) {
         columns.add('balance', m('th', 'Variants'));
     });
@@ -40,6 +44,8 @@ app.initializers.add('flamarkt-variants', () => {
 
     extend(ProductShowPage.prototype, 'fields', function (fields) {
         if (this.product!.attribute('isVariantChild')) {
+            const master = this.product!.variantMaster();
+
             fields.add('variant-child-toggle', m('.Form-group', [
                 m('label', 'Variant Child'),
                 Switch.component({
@@ -49,6 +55,10 @@ app.initializers.add('flamarkt-variants', () => {
                         this.dirty = true;
                     },
                 }, 'Attached as child'),
+                master ? LinkButton.component({
+                    className: 'Button',
+                    href: app.route.product(master),
+                }, 'Edit Master') : null,
             ]));
         } else {
             fields.add('variant-master-toggle', m('.Form-group', [
