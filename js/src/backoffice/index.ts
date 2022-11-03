@@ -1,3 +1,4 @@
+import app from 'flamarkt/backoffice/backoffice/app';
 import ProductList from 'flamarkt/core/backoffice/components/ProductList';
 import ProductShowPage from 'flamarkt/core/backoffice/pages/ProductShowPage';
 import Product from 'flamarkt/core/common/models/Product';

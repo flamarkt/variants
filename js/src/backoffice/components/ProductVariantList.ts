@@ -1,3 +1,4 @@
+import app from 'flamarkt/backoffice/backoffice/app';
 import LinkButton from 'flarum/common/components/LinkButton';
 import AbstractList from 'flamarkt/backoffice/backoffice/components/AbstractList';
 import Product from 'flamarkt/core/common/models/Product';

@@ -1,3 +1,4 @@
+import app from 'flarum/forum/app';
 import {extend, override} from 'flarum/common/extend';
 import {forum} from './compat';
 import Select from 'flarum/common/components/Select';
@@ -12,7 +13,7 @@ export {
 };
 
 app.initializers.add('flamarkt-variants', () => {
-    Product.prototype.variants = Model.hasMany('variants');
+    Product.prototype.variants = Model.hasMany<Product>('variants');
 
     extend(ProductShowLayout.prototype, 'oninit', function () {
         this.selectedVariantIndex = 0;

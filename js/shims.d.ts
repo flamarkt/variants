@@ -16,3 +16,10 @@ declare module 'flamarkt/core/backoffice/pages/ProductShowPage' {
         variantProductListState: ProductListState
     }
 }
+
+declare module 'flamarkt/core/common/models/Product' {
+    export default interface Product {
+        variants: () => (Product | undefined)[] | false
+        variantMaster: () => Product | false
+    }
+}
