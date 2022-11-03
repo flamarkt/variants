@@ -1,5 +1,6 @@
 import app from 'flamarkt/backoffice/backoffice/app';
 import ProductList from 'flamarkt/core/backoffice/components/ProductList';
+import ProductIndexPage from 'flamarkt/core/backoffice/pages/ProductIndexPage';
 import ProductShowPage from 'flamarkt/core/backoffice/pages/ProductShowPage';
 import Product from 'flamarkt/core/common/models/Product';
 import ProductListState from 'flamarkt/core/common/states/ProductListState';
@@ -7,6 +8,7 @@ import {extend} from 'flarum/common/extend';
 import Model from 'flarum/common/Model';
 import Button from 'flarum/common/components/Button';
 import LinkButton from 'flarum/common/components/LinkButton';
+import Select from 'flarum/common/components/Select';
 import Switch from 'flarum/common/components/Switch';
 import ProductVariantList from './components/ProductVariantList';
 import {backoffice} from './compat';
@@ -23,7 +25,15 @@ app.initializers.add('flamarkt-variants', () => {
     });
 
     extend(ProductList.prototype, 'columns', function (columns, product) {
-        columns.add('balance', m('td', product.attribute('isVariantMaster') ? 'Yes' : 'No'));
+        let label: string;
+
+        if (product.attribute('isVariantChild')) {
+            label = 'Child';
+        } else {
+            label = product.attribute('isVariantMaster') ? 'Yes' : 'No';
+        }
+
+        columns.add('balance', m('td', label));
     });
 
     extend(ProductShowPage.prototype, 'oninit', function () {
@@ -108,5 +118,48 @@ app.initializers.add('flamarkt-variants', () => {
             data.relationships = data.relationships || {};
             data.relationships.variantMaster = null;
         }
+    });
+
+    extend(ProductIndexPage.prototype, 'filters', function (items) {
+        const filter = this.list.params.filter || {};
+
+        items.add('variants', Select.component({
+            value: filter.allVariantTypes ? 'all' : (filter.isVariant ? 'with' : (filter['-isVariant'] ? 'without' : 'default')),
+            options: {
+                default: 'Variants: default',
+                with: 'With variants only',
+                without: 'Without variants only',
+                all: 'All including children',
+            },
+            onchange: (value: string) => {
+                this.list.params.filter = filter;
+
+                // TODO: compatibility or feedback of incompatibility with search query
+                switch (value) {
+                    case 'default':
+                        delete this.list.params.filter.isVariant;
+                        delete this.list.params.filter['-isVariant'];
+                        delete this.list.params.filter.allVariantTypes;
+                        break;
+                    case 'with':
+                        this.list.params.filter.isVariant = '1';
+                        delete this.list.params.filter['-isVariant'];
+                        delete this.list.params.filter.allVariantTypes;
+                        break;
+                    case 'without':
+                        delete this.list.params.filter.isVariant;
+                        this.list.params.filter['-isVariant'] = '1';
+                        delete this.list.params.filter.allVariantTypes;
+                        break;
+                    case 'all':
+                        delete this.list.params.filter.isVariant;
+                        delete this.list.params.filter['-isVariant'];
+                        this.list.params.filter.allVariantTypes = '1';
+                        break;
+                }
+
+                this.list.refresh();
+            }
+        }), 80);
     });
 });

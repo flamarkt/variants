@@ -9,7 +9,7 @@ class AllVariantsFilter implements FilterInterface
 {
     public function getFilterKey(): string
     {
-        return 'variantOf';
+        return 'allVariantTypes';
     }
 
     public function filter(FilterState $filterState, string $filterValue, bool $negate)

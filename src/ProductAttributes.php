@@ -9,10 +9,11 @@ class ProductAttributes
 {
     public function __invoke(ProductSerializer $serializer, Product $product): array
     {
-        $isChild = !is_null($product->variant_master_id);
+        $isMaster = (bool)$product->is_variant_master;
+        $isChild = !$isMaster && !is_null($product->variant_master_id);
 
         $attributes = [
-            'isVariantMaster' => (bool)$product->is_variant_master,
+            'isVariantMaster' => $isMaster,
             'isVariantChild' => $isChild,
         ];
 

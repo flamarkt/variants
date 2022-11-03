@@ -15,6 +15,10 @@ class DefaultMutator
                 // If the "all variants" filter is active, we won't apply the default filtering logic
                 return;
             }
+
+            if ($activeFilter instanceof VariantOfFilter) {
+                return;
+            }
         }
 
         $filterState->getQuery()->where(function (Builder $builder) {
