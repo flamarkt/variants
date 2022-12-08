@@ -8,11 +8,10 @@ use Flarum\Http\SlugManager;
 
 class BasicProductAttributes
 {
-    protected $slugManager;
-
-    public function __construct(SlugManager $slugManager)
+    public function __construct(
+        protected SlugManager $slugManager
+    )
     {
-        $this->slugManager = $slugManager;
     }
 
     public function __invoke(BasicProductSerializer $serializer, Product $product): array

@@ -9,11 +9,10 @@ use Flarum\Extension\ExtensionManager;
  */
 class CheckLibraryEnabled
 {
-    protected $manager;
-
-    public function __construct(ExtensionManager $manager)
+    public function __construct(
+        protected ExtensionManager $manager
+    )
     {
-        $this->manager = $manager;
     }
 
     public function __invoke(): bool

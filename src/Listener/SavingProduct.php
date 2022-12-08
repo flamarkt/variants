@@ -9,14 +9,13 @@ use Illuminate\Support\Arr;
 
 class SavingProduct
 {
-    protected $products;
-
-    public function __construct(ProductRepository $products)
+    public function __construct(
+        protected ProductRepository $products
+    )
     {
-        $this->products = $products;
     }
 
-    public function handle(Saving $event)
+    public function handle(Saving $event): void
     {
         $attributes = (array)Arr::get($event->data, 'data.attributes');
 

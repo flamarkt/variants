@@ -9,11 +9,10 @@ use Illuminate\Database\Query\Builder;
 
 class VariantOfFilter implements FilterInterface
 {
-    protected $products;
-
-    public function __construct(ProductRepository $products)
+    public function __construct(
+        protected ProductRepository $products
+    )
     {
-        $this->products = $products;
     }
 
     public function getFilterKey(): string

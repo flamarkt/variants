@@ -10,18 +10,19 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class PriceFilter implements PriceDriverInterface
 {
-    protected $manager;
-
-    public function __construct(PriceManager $manager)
+    public function __construct(
+        protected PriceManager $manager
+    )
     {
-        $this->manager = $manager;
     }
 
-    public function __invoke(Product $product, User $actor, ServerRequestInterface $request = null)
+    public function __invoke(Product $product, User $actor, ServerRequestInterface $request = null): ?int
     {
         // If no price has been explicitly selected for the child, use the parent values
         if ($product->variant_master_id && is_null($product->price)) {
             return $this->manager->price($product->variantMaster, $actor, $request);
         }
+
+        return null;
     }
 }

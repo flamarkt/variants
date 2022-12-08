@@ -8,7 +8,7 @@ use Illuminate\Database\Query\Builder;
 
 class DefaultMutator
 {
-    public function __invoke(FilterState $filterState, QueryCriteria $criteria)
+    public function __invoke(FilterState $filterState, QueryCriteria $criteria): void
     {
         foreach ($filterState->getActiveFilters() as $activeFilter) {
             if ($activeFilter instanceof AllVariantsFilter) {
